@@ -12,6 +12,7 @@ from genetic_tsp import GeneticTSP
 from aco_tsp import AntColonyOptimization_TSP
 from sa_tsp import SimulatedAnnealingTSP
 from tabu_tsp import TabuSearchTSP
+from pso_tsp import PSOTSP
 
 '''
     - ATT48 is a set of 48 cities (US state capitals) from TSPLIB. The minimal tour has length 10628.
@@ -37,27 +38,29 @@ from tabu_tsp import TabuSearchTSP
 '''
 full_path = "/Users/pelanmar1/Coding/Tesis/heuristics/testdata.xlsx"
 # Load a dataset
-df = pd.read_excel(full_path, sheet_name="FIVE", header=None)
+df = pd.read_excel(full_path, sheet_name="ITAM1", header=None)
 graph = df.as_matrix()
 
-# Genetic Algorithm
-print("Running Genetic Algorithm")
-solution = GeneticTSP(graph, tournament_size=10, mutation_rate=0.2, num_generations=100, population_size=1000).run()
+# # Genetic Algorithm
+# print("Running Genetic Algorithm")
+# solution = GeneticTSP(graph, tournament_size=10, mutation_rate=0.2, num_generations=100, population_size=1000).run()
 
-# Ant Colony Optimization
-print("Running Ant Colony Optimization")
-rho = 0.5
-aco = AntColonyOptimization_TSP(graph=graph, t0=1, m=1000, alpha=1, beta=1,rho=0.5, delta=0.5, num_iters=20).run()
+# # Ant Colony Optimization
+# print("Running Ant Colony Optimization")
+# rho = 0.5
+# aco = AntColonyOptimization_TSP(graph=graph, t0=1, m=1000, alpha=1, beta=1,rho=0.5, delta=0.5, num_iters=20).run()
 
-# Simulated Anneiling
-print("Running Simulated Anneiling")
-sa = SimulatedAnnealingTSP(graph=graph, cooling_rate=0.0003, temperature=100000).run()
+# # Simulated Anneiling
+# print("Running Simulated Anneiling")
+# sa = SimulatedAnnealingTSP(graph=graph, cooling_rate=0.0003, temperature=100000).run()
 
-# Tabu Search
-print("Running Tabu Search")
-TabuSearchTSP(graph = graph, iters=5, tabu_k=3).run()
+# # Tabu Search
+# print("Running Tabu Search")
+# TabuSearchTSP(graph = graph, iters=5, tabu_k=3).run()
 
-
+# Particle Swarm Optimization
+print("Running Particle Swarm Optimization")
+PSOTSP(graph=graph, alpha=1,beta=0.8, population_size=200, iters=1000).run()
 
 #     A = np.matrix(graph)
 #     G = nx.from_numpy_matrix(graph)

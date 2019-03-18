@@ -2,10 +2,12 @@ import math
 import pandas as pd
 import random
 from operator import attrgetter
+from tsp_plotter import TSPPlotter
 
 
 class PSOTSP:
-    def __init__(self, graph, alpha, beta, population_size, iters):
+    def __init__(self, graph, alpha, beta, population_size, iterations):
+        self.name = "Particle Swarm Optimization"
         self.graph = graph
         self.n = len(graph)
         self.alpha = alpha
@@ -14,7 +16,8 @@ class PSOTSP:
         self.g_best_sol = []
         self.population_size = population_size
         self.population = []
-        self.iters = iters
+        self.iterations = iterations
+        self.run_data = []
 
     def init_population(self):
         self.population.clear()
@@ -29,22 +32,22 @@ class PSOTSP:
         if random.random() <= self.beta:
             new_velocity += ss_social
         return new_velocity
-    
+
     def velocity_selection(self, ss_cog, ss_social):
         new_velocity = []
         for ss1 in ss_cog:
-            if random.random()<= self.alpha:
+            if random.random() <= self.alpha:
                 new_velocity.append(ss1)
-        
+
         for ss2 in ss_social:
-            if random.random()<= self.beta:
+            if random.random() <= self.beta:
                 new_velocity.append(ss2)
-        
+
         return new_velocity
 
     def run(self):
         self.init_population()
-        for _ in range(self.iters):
+        for _ in range(self.iterations):
             self.g_best = min(self.population, key=attrgetter('cost_p_best'))
 
             for particle in self.population:
@@ -67,20 +70,20 @@ class PSOTSP:
                 particle.velocity = new_velocity
 
                 temp_velocity = self.velocity_selection(ss_p_best, ss_g_best)
-                
+
                 new_solution = self.make_swap_seq(sol_current, temp_velocity)
                 new_cost = self.calc_cost(new_solution)
 
                 particle.solution_current = new_solution
-                particle.cost_current = new_cost                
+                particle.cost_current = new_cost
 
                 # Update pbest
                 if particle.cost_current < particle.cost_p_best:
                     particle.cost_p_best = particle.cost_current
                     particle.solution_p_best = particle.solution_current
 
-            self.print_best_tour()
-
+            self.update_run_data()
+        return self.run_data
 
     def create_rand_particle(self):
         solution = self.create_rand_solution()
@@ -129,9 +132,11 @@ class PSOTSP:
         distance += self.graph[a][b]
         return distance
 
-    def print_best_tour(self):
-        tour_info = {'tour':self.g_best.solution_p_best, 'tour_length':self.g_best.cost_p_best}
-        print(tour_info)
+    def update_run_data(self):
+        tour_info = {'tour': self.g_best.solution_p_best,
+                     'tour_length': self.g_best.cost_p_best}
+        self.run_data.append(tour_info)
+        print(tour_info)        
 
 class Particle:
     def __init__(self, solution, cost):
@@ -149,20 +154,17 @@ class Particle:
         string += "Current solution cost: " + str(self.cost_current) + "\n"
         string += "Current velocity: " + str(self.velocity) + "\n"
         return string
-    
-    
-        
 
 
 if __name__ == "__main__":
     full_path = "/Users/pelanmar1/Coding/Tesis/heuristics/testdata.xlsx"
     # Load a dataset
-    df = pd.read_excel(full_path, sheet_name="ATT48", header=None)
+    df = pd.read_excel(full_path, sheet_name="ITAM1", header=None)
     graph = df.as_matrix()
-    random.seed(100)
+
     alpha = 0.8
     beta = 0.8
     population_size = 50
-    iters = 100
-    pso = PSOTSP(graph, alpha, beta, population_size, iters)
+    iterations = 100
+    pso = PSOTSP(graph, alpha, beta, population_size, iterations)
     pso.run()

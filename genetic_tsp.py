@@ -1,6 +1,6 @@
 from random import shuffle, uniform, randint
 import math
-
+from tsp_plotter import TSPPlotter
 class GeneticTSP:
     def __init__(self, graph_matrix, elitism=True, tournament_size=5, mutation_rate=0.015, num_generations=1000, population_size=200):
         self.graph_matrix = graph_matrix
@@ -14,10 +14,14 @@ class GeneticTSP:
             "tour": [],
             "tour_length": math.inf
         }
+        self.run_data = []
 
     def _update_best_solution(self, tour, tour_length):
         self.current_best_solution["tour"] = tour
         self.current_best_solution["tour_length"] = tour_length
+
+    def update_run_data(self):
+        self.run_data.append(self.current_best_solution)
 
 
     def create_individual(self):
@@ -116,4 +120,6 @@ class GeneticTSP:
             score = self.evaluate_individual(fittest)
             self._update_best_solution(fittest, score)
             print(self.current_best_solution)
-        return fittest
+            self.update_run_data()
+
+        return self.run_data

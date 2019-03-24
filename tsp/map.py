@@ -44,18 +44,18 @@ def draw_all_connection(xy,plt,alpha=0.1,linewidth=1):
         
 tour = [17, 4, 20, 5, 2, 9, 10, 13, 8, 19, 11, 23, 16, 21, 6, 14, 0, 18, 22, 7, 15, 1, 12, 3, 17]
 tour_to_xy(tour,plt,linewidth=5)
-for i in range(100):
-    draw_all_connection(xy,plt,alpha=i/100)
-    
-    # ax =plt.axes()
-    # plt.text(0.5, 0.5,'matplotlib',
-    #      horizontalalignment='center',
-    #      verticalalignment='center',
-    #      transform = ax.transAxes, fontsize=100)
+#for i in range(100):
+draw_all_connection(xy,plt,alpha=1)
 
-    root, ext = os.path.splitext(__file__)
-    mapfile = root  + 'test.png'
-    # Create the map. Save the file to basic_plot.html. _map.html is the default
-    # if 'path' is not specified
-    mplleaflet.show(path=mapfile)
-    time.sleep(3)
+# ax =plt.axes()
+# plt.text(0.5, 0.5,'matplotlib',
+#      horizontalalignment='center',
+#      verticalalignment='center',
+#      transform = ax.transAxes, fontsize=100)
+
+root, ext = os.path.splitext(__file__)
+mapfile = root  + 'test.html'
+# Create the map. Save the file to basic_plot.html. _map.html is the default
+# if 'path' is not specified
+mplleaflet.show(path=mapfile)
+time.sleep(3)
